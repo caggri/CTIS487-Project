@@ -31,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
     Toast mToast;
 
     String mainJ= "";
-    String garageCo2;
+    Integer garageCo2;
     String garageLights, living_roomLights, kitchenLights;
-    String garageTemparature, kitchenTemparature, living_roomTemparature;
+    Integer garageTemparature, kitchenTemparature, living_roomTemparature;
     String[] rooms ={"living_room", "kitchen", "garage"};
 
 
@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
                                 Log.i("Room Check", rooms[j]);
 
                                 living_roomLights = jsonPart.getString("Lights");
-                                living_roomTemparature = jsonPart.getString( "Temparature");
-                                Log.i("Value checj", living_roomLights + "\n"  + living_roomTemparature);
+                                living_roomTemparature = Integer.parseInt(jsonPart.getString( "Temparature"));
+                                //Log.i("Value checj", living_roomLights + "\n"  + living_roomTemparature);
 
                                 mainJ += "Living Room:\n" + "Temp: " + living_roomTemparature + "\nLigths: " + living_roomLights + "\n\n";
                                 break;
@@ -103,15 +103,15 @@ public class MainActivity extends AppCompatActivity {
                             case "kitchen":
                                 Log.i("Room Check", rooms[j]);
                                 kitchenLights = jsonPart.getString("Lights");
-                                kitchenTemparature = jsonPart.getString("Temparature");
+                                kitchenTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
                                 mainJ += "Kitchen:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLights + "\n\n";
                                 break;
 
                             case "garage":
                                 Log.i("Room Check", rooms[j]);
-                                garageCo2 = jsonPart.getString("CO2 level");
+                                garageCo2 = Integer.parseInt(jsonPart.getString("CO2 level"));
                                 garageLights = jsonPart.getString("Lights");
-                                garageTemparature = jsonPart.getString("Temparature");
+                                garageTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
                                 mainJ += "Garage:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLights + "\nCo2 Level: " + garageCo2 + "\n\n";
                                 break;
 
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
 
-            result = task.execute("https://gist.githubusercontent.com/caggri/369f0d9143218bb3f4297cbebb9408ab/raw/31c9e1ea0f09ba3b2cf1b10f067cbb6762f44620/data.json").get();
+            result = task.execute("https://gist.githubusercontent.com/caggri/369f0d9143218bb3f4297cbebb9408ab/raw/f550d0677488322d53c4721908de872c54f163e6/data.json").get();
 
 
         }
