@@ -31,10 +31,10 @@ public class MainActivity extends AppCompatActivity {
     Toast mToast;
 
     String mainJ= "";
-    Integer garageCo2;
-    String garageLights, living_roomLights, kitchenLights;
-    Integer garageTemparature, kitchenTemparature, living_roomTemparature;
-    String[] rooms ={"living_room", "kitchen", "garage"};
+    Integer garageCarbon, kitchenCarbon, livingroomCarbon;
+    String garageLight, livingroomLight, kitchenLight;
+    Integer garageTemparature, kitchenTemparature, livingroomTemparature;
+    String[] rooms ={"LivingroomActivity", "KitchenActivity", "GarageActivity"};
 
 
     String part;
@@ -90,29 +90,29 @@ public class MainActivity extends AppCompatActivity {
                         jsonPart = arr.getJSONObject(i);
                         switch (rooms[j]){
 
-                            case "living_room":
+                            case "LivingroomActivity":
                                 Log.i("Room Check", rooms[j]);
 
-                                living_roomLights = jsonPart.getString("Lights");
-                                living_roomTemparature = Integer.parseInt(jsonPart.getString( "Temparature"));
-                                //Log.i("Value checj", living_roomLights + "\n"  + living_roomTemparature);
+                                livingroomLight = jsonPart.getString("Light");
+                                livingroomTemparature = Integer.parseInt(jsonPart.getString( "Temparature"));
+                                //Log.i("Value checj", livingroomLight + "\n"  + livingroomTemparature);
 
-                                mainJ += "Living Room:\n" + "Temp: " + living_roomTemparature + "\nLigths: " + living_roomLights + "\n\n";
+                                mainJ += "Living Room:\n" + "Temp: " + livingroomTemparature + "\nLigths: " + livingroomLight + "\n\n";
                                 break;
 
-                            case "kitchen":
+                            case "KitchenActivity":
                                 Log.i("Room Check", rooms[j]);
-                                kitchenLights = jsonPart.getString("Lights");
+                                kitchenLight = jsonPart.getString("Light");
                                 kitchenTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
-                                mainJ += "Kitchen:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLights + "\n\n";
+                                mainJ += "Kitchen:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLight + "\n\n";
                                 break;
 
-                            case "garage":
+                            case "GarageActivity":
                                 Log.i("Room Check", rooms[j]);
-                                garageCo2 = Integer.parseInt(jsonPart.getString("CO2 level"));
-                                garageLights = jsonPart.getString("Lights");
+                                garageCarbon = Integer.parseInt(jsonPart.getString("Carbon level"));
+                                garageLight = jsonPart.getString("Light");
                                 garageTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
-                                mainJ += "Garage:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLights + "\nCo2 Level: " + garageCo2 + "\n\n";
+                                mainJ += "Garage:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLight + "\nCarbon Level: " + garageCarbon + "\n\n";
                                 break;
 
 
@@ -146,33 +146,43 @@ public class MainActivity extends AppCompatActivity {
         tv = (TextView) findViewById(R.id.tv);
 
         try {
-
             result = task.execute("https://gist.githubusercontent.com/caggri/369f0d9143218bb3f4297cbebb9408ab/raw/f550d0677488322d53c4721908de872c54f163e6/data.json").get();
-
-
         }
         catch (Exception e){
 
             e.getStackTrace();
         }
-
     }
 
     public void onClick(View view){
         switch (view.getId()){
             case R.id.garageButton:
-                intent = new Intent(this, garage.class);
+                intent = new Intent(this, GarageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("temperature", "hej temp");
+                bundle.putString("light", "hej light");
+                bundle.putString("carbon", "hej carbon");
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-
             case R.id.kitchenButton:
-                intent = new Intent(this, kitchen.class);
-                startActivity(intent);
+                /*bundle = new Bundle();
+                bundle.putInt("temperature", kitchenTemparature);
+                bundle.putString("light", kitchenLight);
+                bundle.putInt("carbon", kitchenCarbon);
+                intent.putExtras(bundle);
+                intent = new Intent(this, KitchenActivity.class);
+                startActivity(intent);*/
                 break;
 
             case R.id.livingRoomButton:
-                intent = new Intent(this, living_room.class);
-                startActivity(intent);
+                /*bundle = new Bundle();
+                bundle.putInt("temperature", livingroomTemparature);
+                bundle.putString("light", livingroomLight);
+                bundle.putInt("carbon", livingroomCarbon);
+                intent.putExtras(bundle);
+                intent = new Intent(this, LivingroomActivity.class);
+                startActivity(intent);*/
                 break;
 
             case R.id.infoImageView:

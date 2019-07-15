@@ -12,9 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".info"></activity>
-        <activity android:name=".living_room" />
-        <activity android:name=".garage" />
-        <activity android:name=".kitchen" />
+        <activity android:name=".LivingroomActivity" />
+        <activity android:name=".GarageActivity" />
+        <activity android:name=".KitchenActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
