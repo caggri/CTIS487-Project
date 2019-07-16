@@ -11,11 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".info"></activity>
-        <activity android:name=".LivingroomActivity" />
-        <activity android:name=".GarageActivity" />
-        <activity android:name=".KitchenActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".info" android:theme="@style/AppTheme.NoActionBar" ></activity>
+        <activity android:name=".LivingroomActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".GarageActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".KitchenActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

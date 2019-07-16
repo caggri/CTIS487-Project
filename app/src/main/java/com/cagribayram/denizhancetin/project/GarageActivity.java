@@ -11,7 +11,6 @@ public class GarageActivity extends AppCompatActivity {
     private int carbon;
 
     private String result;
-
     private TextView tv;
 
     @Override
@@ -20,19 +19,15 @@ public class GarageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_garage);
 
         Bundle extras = getIntent().getExtras();
-
         tv = (TextView) findViewById(R.id.tv_garage);
 
         if(extras != null){
-            //How to cast Integer to int?
-           temperature = extras.getInt("temperature");
-           light = extras.getString("light");
-           carbon = extras.getInt("carbon");
+            temperature = extras.getInt("temperature");
+            light = extras.getString("light");
+            carbon = extras.getInt("carbon");
 
             result = temperature + ", " + light + ", " + carbon;
             tv.setText(result);
         }
-
-
     }
 }

@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Project</string>
-    <string name="welcome_message">Welcome Home</string>
-    <string name="kitchen">Kitchen</string>
-    <string name="living">Living Room</string>
-    <string name="garage">Garage</string>
-    <string name="Status">Home Status</string>
+    <string name="welcome_message_txt">Welcome Home</string>
+    <string name="kitchen_txt">Kitchen</string>
+    <string name="livingroom_txt">Living Room</string>
+    <string name="garage_txt">Garage</string>
+    <string name="status_txt">Home Status</string>
     <string name="appinfo">Application Info</string>
-    <string name="back">Back</string>
-    <string name="exit">Exit</string>
+    <string name="back_txt">Back</string>
+    <string name="exit_txt">Exit</string>
 </resources>

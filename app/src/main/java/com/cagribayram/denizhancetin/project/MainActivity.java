@@ -29,17 +29,16 @@ public class MainActivity extends AppCompatActivity {
     private Button kitchenButton;
     private Button livingRoomButton;
     private Button garageButton;
+
     private TextView tvAir, tvLights;
     Intent intent;
     Toast mToast;
 
     String mainJ = "";
-    int garageCo2;
+    int garageCo2, livingroomCo2, kitchenCo2;
     String garageLights, livingroomLights, kitchenLights;
     int garageTemparature, kitchenTemparature, livingroomTemparature;
     String[] rooms = {"living_room", "kitchen", "garage"};
-
-
     String part;
 
     public class DownloadTask extends AsyncTask<String, Void, String> {
@@ -62,12 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
                 while (data != -1) {
                     char current = (char) data;
-
                     result += current;
-
                     data = reader.read();
-
-
                 }
                 return result;
             } catch (Exception e) {
@@ -87,20 +82,17 @@ public class MainActivity extends AppCompatActivity {
                 for (int j = 0; j < rooms.length; j++) {
                     weatherInfo = jsonObject.getString(rooms[j]);
 
-
                     arr = new JSONArray(weatherInfo);
 
                     for (int i = 0; i < arr.length(); i++) {
                         jsonPart = arr.getJSONObject(i);
                         switch (rooms[j]) {
-
                             case "living_room":
                                 Log.i("Room Check", rooms[j]);
-
                                 livingroomLights = jsonPart.getString("Lights");
                                 livingroomTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
-                                Log.i("Value checj", livingroomLights + "\n" + livingroomTemparature);
 
+                                Log.i("Value checj", livingroomLights + "\n" + livingroomTemparature);
                                 mainJ += "Living Room:\n" + "Temp: " + livingroomTemparature + "\nLigths: " + livingroomLights + "\n\n";
                                 break;
 
@@ -108,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                                 Log.i("Room Check", rooms[j]);
                                 kitchenLights = jsonPart.getString("Lights");
                                 kitchenTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
+
                                 mainJ += "Kitchen:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLights + "\n\n";
                                 break;
 
@@ -118,12 +111,8 @@ public class MainActivity extends AppCompatActivity {
                                 garageTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
                                 mainJ += "Garage:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLights + "\nCo2 Level: " + garageCo2 + "\n\n";
                                 break;
-
-
                         }
-
                     }
-
                 }
 
                 Log.i("Result Check", mainJ);
@@ -155,59 +144,51 @@ public class MainActivity extends AppCompatActivity {
         tvLights = (TextView) findViewById(R.id.tvLights);
 
         try {
-
             result = task.execute("https://gist.githubusercontent.com/caggri/369f0d9143218bb3f4297cbebb9408ab/raw/f550d0677488322d53c4721908de872c54f163e6/data.json").get();
-
-
         } catch (Exception e) {
-
             e.getStackTrace();
         }
-
     }
 
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.garageButton:
                 intent = new Intent(this, GarageActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putInt("temperature", garageTemparature);
-                bundle.putString("light", garageLights);
-                bundle.putInt("carbon", garageCo2);
-                intent.putExtras(bundle);
-                //Log.i("T.getClass().getNamYPE check", garageTemparaturee());
+                Bundle bundleG = new Bundle();
+                bundleG.putInt("temperature", garageTemparature);
+                bundleG.putString("light", garageLights);
+                bundleG.putInt("carbon", garageCo2);
+
+                intent.putExtras(bundleG);
                 startActivity(intent);
                 break;
             case R.id.kitchenButton:
-                bundle = new Bundle();
-                bundle.putInt("temperature", kitchenTemparature);
-                bundle.putString("light", kitchenLights);
-                //bundle.putInt("carbon", kitchenCa);
-                intent.putExtras(bundle);
                 intent = new Intent(this, KitchenActivity.class);
+                Bundle bundleK = new Bundle();
+                bundleK.putInt("temperature", kitchenTemparature);
+                bundleK.putString("light", kitchenLights);
+                //bundleK.putInt("carbon", kitchenCo2);
+
+                intent.putExtras(bundleK);
                 startActivity(intent);
                 break;
-
             case R.id.livingRoomButton:
-                bundle = new Bundle();
-                bundle.putInt("temperature", livingroomTemparature);
-                bundle.putString("light", livingroomLights);
-                //bundle.putInt("carbon", livingroomCarbon);
-                intent.putExtras(bundle);
                 intent = new Intent(this, LivingroomActivity.class);
+                Bundle bundleL = new Bundle();
+                bundleL.putInt("temperature", livingroomTemparature);
+                bundleL.putString("light", livingroomLights);
+                //bundleL.putInt("carbon", livingroomCo2);
+
+                intent.putExtras(bundleL);
                 startActivity(intent);
                 break;
-
             case R.id.infoImageView:
                 intent = new Intent(this, info.class);
                 startActivity(intent);
                 break;
             case R.id.exitButton:
                 makeAndShowDialogBox("Are you sure want to exit?");
-
         }
-
-
     }
 
     private void displayToast(String msg) {
