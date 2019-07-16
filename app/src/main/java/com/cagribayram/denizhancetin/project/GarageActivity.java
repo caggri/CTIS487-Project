@@ -25,9 +25,9 @@ public class GarageActivity extends AppCompatActivity {
 
         if(extras != null){
             //How to cast Integer to int?
-            //temperature = Integer.parseInt(extras.getString("temperature"));
-            light = extras.getString("light");
-            //carbon = Integer.parseInt(extras.getString("carbon"));
+           temperature = extras.getInt("temperature");
+           light = extras.getString("light");
+           carbon = extras.getInt("carbon");
 
             result = temperature + ", " + light + ", " + carbon;
             tv.setText(result);

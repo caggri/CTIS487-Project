@@ -4,7 +4,8 @@
     <string name="kitchen">Kitchen</string>
     <string name="living">Living Room</string>
     <string name="garage">Garage</string>
-    <string name="Status">Status</string>
+    <string name="Status">Home Status</string>
     <string name="appinfo">Application Info</string>
     <string name="back">Back</string>
+    <string name="exit">Exit</string>
 </resources>

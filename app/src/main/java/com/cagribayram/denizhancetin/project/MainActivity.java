@@ -1,8 +1,11 @@
 package com.cagribayram.denizhancetin.project;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,18 +29,19 @@ public class MainActivity extends AppCompatActivity {
     private Button kitchenButton;
     private Button livingRoomButton;
     private Button garageButton;
-    private TextView tv;
+    private TextView tvAir, tvLights;
     Intent intent;
     Toast mToast;
 
-    String mainJ= "";
-    Integer garageCarbon, kitchenCarbon, livingroomCarbon;
-    String garageLight, livingroomLight, kitchenLight;
-    Integer garageTemparature, kitchenTemparature, livingroomTemparature;
-    String[] rooms ={"LivingroomActivity", "KitchenActivity", "GarageActivity"};
+    String mainJ = "";
+    int garageCo2;
+    String garageLights, livingroomLights, kitchenLights;
+    int garageTemparature, kitchenTemparature, livingroomTemparature;
+    String[] rooms = {"living_room", "kitchen", "garage"};
 
 
     String part;
+
     public class DownloadTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -56,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
                 int data = reader.read();
 
-                while (data != -1){
+                while (data != -1) {
                     char current = (char) data;
 
                     result += current;
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject jsonPart;
                 String weatherInfo;
 
-                for (int j = 0; j < rooms.length; j++){
+                for (int j = 0; j < rooms.length; j++) {
                     weatherInfo = jsonObject.getString(rooms[j]);
 
 
@@ -88,31 +92,31 @@ public class MainActivity extends AppCompatActivity {
 
                     for (int i = 0; i < arr.length(); i++) {
                         jsonPart = arr.getJSONObject(i);
-                        switch (rooms[j]){
+                        switch (rooms[j]) {
 
-                            case "LivingroomActivity":
+                            case "living_room":
                                 Log.i("Room Check", rooms[j]);
 
-                                livingroomLight = jsonPart.getString("Light");
-                                livingroomTemparature = Integer.parseInt(jsonPart.getString( "Temparature"));
-                                //Log.i("Value checj", livingroomLight + "\n"  + livingroomTemparature);
+                                livingroomLights = jsonPart.getString("Lights");
+                                livingroomTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
+                                Log.i("Value checj", livingroomLights + "\n" + livingroomTemparature);
 
-                                mainJ += "Living Room:\n" + "Temp: " + livingroomTemparature + "\nLigths: " + livingroomLight + "\n\n";
+                                mainJ += "Living Room:\n" + "Temp: " + livingroomTemparature + "\nLigths: " + livingroomLights + "\n\n";
                                 break;
 
-                            case "KitchenActivity":
+                            case "kitchen":
                                 Log.i("Room Check", rooms[j]);
-                                kitchenLight = jsonPart.getString("Light");
+                                kitchenLights = jsonPart.getString("Lights");
                                 kitchenTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
-                                mainJ += "Kitchen:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLight + "\n\n";
+                                mainJ += "Kitchen:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLights + "\n\n";
                                 break;
 
-                            case "GarageActivity":
+                            case "garage":
                                 Log.i("Room Check", rooms[j]);
-                                garageCarbon = Integer.parseInt(jsonPart.getString("Carbon level"));
-                                garageLight = jsonPart.getString("Light");
+                                garageCo2 = Integer.parseInt(jsonPart.getString("CO2 level"));
+                                garageLights = jsonPart.getString("Lights");
                                 garageTemparature = Integer.parseInt(jsonPart.getString("Temparature"));
-                                mainJ += "Garage:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLight + "\nCarbon Level: " + garageCarbon + "\n\n";
+                                mainJ += "Garage:\n" + "Temp: " + kitchenTemparature + "\nLigths: " + kitchenLights + "\nCo2 Level: " + garageCo2 + "\n\n";
                                 break;
 
 
@@ -123,7 +127,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Log.i("Result Check", mainJ);
-                tv.setText(mainJ);
+                tvAir.setText("Air Quality & Temparature:\nLiving Room: " + livingroomTemparature + "\nKitchen: " + kitchenTemparature + "\nGarage: " + garageTemparature + "\nGarage Co2: " + garageCo2);
+                tvLights.setText("Lights:\n Living Room:" + livingroomLights + "\nKitchen:" + kitchenLights + "\nGarage: " + garageLights );
+
                 System.out.println("Result Check " + mainJ);
 
             } catch (Exception e) {
@@ -133,70 +139,80 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.welcome);
+        mp.start();
+
         DownloadTask task = new DownloadTask();
 
         String result = null;
 
-        tv = (TextView) findViewById(R.id.tv);
+        tvAir = (TextView) findViewById(R.id.tvAir);
+        tvLights = (TextView) findViewById(R.id.tvLights);
 
         try {
+
             result = task.execute("https://gist.githubusercontent.com/caggri/369f0d9143218bb3f4297cbebb9408ab/raw/f550d0677488322d53c4721908de872c54f163e6/data.json").get();
-        }
-        catch (Exception e){
+
+
+        } catch (Exception e) {
 
             e.getStackTrace();
         }
+
     }
 
-    public void onClick(View view){
+    public void onClick(View view) {
         switch (view.getId()){
             case R.id.garageButton:
                 intent = new Intent(this, GarageActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("temperature", "hej temp");
-                bundle.putString("light", "hej light");
-                bundle.putString("carbon", "hej carbon");
+                bundle.putInt("temperature", garageTemparature);
+                bundle.putString("light", garageLights);
+                bundle.putInt("carbon", garageCo2);
                 intent.putExtras(bundle);
+                //Log.i("T.getClass().getNamYPE check", garageTemparaturee());
                 startActivity(intent);
                 break;
             case R.id.kitchenButton:
-                /*bundle = new Bundle();
+                bundle = new Bundle();
                 bundle.putInt("temperature", kitchenTemparature);
-                bundle.putString("light", kitchenLight);
-                bundle.putInt("carbon", kitchenCarbon);
+                bundle.putString("light", kitchenLights);
+                //bundle.putInt("carbon", kitchenCa);
                 intent.putExtras(bundle);
                 intent = new Intent(this, KitchenActivity.class);
-                startActivity(intent);*/
+                startActivity(intent);
                 break;
 
             case R.id.livingRoomButton:
-                /*bundle = new Bundle();
+                bundle = new Bundle();
                 bundle.putInt("temperature", livingroomTemparature);
-                bundle.putString("light", livingroomLight);
-                bundle.putInt("carbon", livingroomCarbon);
+                bundle.putString("light", livingroomLights);
+                //bundle.putInt("carbon", livingroomCarbon);
                 intent.putExtras(bundle);
                 intent = new Intent(this, LivingroomActivity.class);
-                startActivity(intent);*/
+                startActivity(intent);
                 break;
 
             case R.id.infoImageView:
                 intent = new Intent(this, info.class);
                 startActivity(intent);
                 break;
+            case R.id.exitButton:
+                makeAndShowDialogBox("Are you sure want to exit?");
 
         }
+
 
     }
 
     private void displayToast(String msg) {
 
-        if(mToast != null){
+        if (mToast != null) {
             mToast.cancel();
         }
         mToast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);
@@ -204,4 +220,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void makeAndShowDialogBox(String message) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                finishAffinity();
+            }
+        });
+
+
+        alertDialogBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
 }
