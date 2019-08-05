@@ -1,11 +1,16 @@
 package com.cagribayram.denizhancetin.project;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     String[] rooms = {"living_room", "kitchen", "garage"};
     String part;
 
-    public class DownloadTask extends AsyncTask<String, Void, String> {
+  public class DownloadTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... urls) throws RuntimeException {
@@ -127,82 +132,37 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private HomeFragment mHomeFragment;
+    public static FragmentManager mFragmentManager;
+
+    private FragmentTransaction mFragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.welcome);
-        mp.start();
+        Log.i("COnnection stst", String.valueOf(haveNetworkConnection()));
+        if(haveNetworkConnection()) {
+            MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.welcome);
+            mp.start();
+            mFragmentManager = getSupportFragmentManager();
 
-        DownloadTask task = new DownloadTask();
-
-        String result = null;
-
-        tvAir = (TextView) findViewById(R.id.tvAir);
-        tvLights = (TextView) findViewById(R.id.tvLights);
-
-        try {
-            result = task.execute("https://gist.githubusercontent.com/caggri/369f0d9143218bb3f4297cbebb9408ab/raw/f550d0677488322d53c4721908de872c54f163e6/data.json").get();
-        } catch (Exception e) {
-            e.getStackTrace();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mHomeFragment = new HomeFragment();
+            mFragmentTransaction.add(R.id.fragment_container, mHomeFragment, null);
+            mFragmentTransaction.commit();
         }
-    }
+        else{
+        makeAndShowDialogBox("No internet connection detected.");
 
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.garageButton:
-                intent = new Intent(this, GarageActivity.class);
-                Bundle bundleG = new Bundle();
-                bundleG.putInt("temperature", garageTemparature);
-                bundleG.putString("light", garageLights);
-                bundleG.putInt("carbon", garageCo2);
-
-                intent.putExtras(bundleG);
-                startActivity(intent);
-                break;
-            case R.id.kitchenButton:
-                intent = new Intent(this, KitchenActivity.class);
-                Bundle bundleK = new Bundle();
-                bundleK.putInt("temperature", kitchenTemparature);
-                bundleK.putString("light", kitchenLights);
-                //bundleK.putInt("carbon", kitchenCo2);
-
-                intent.putExtras(bundleK);
-                startActivity(intent);
-                break;
-            case R.id.livingRoomButton:
-                intent = new Intent(this, LivingroomActivity.class);
-                Bundle bundleL = new Bundle();
-                bundleL.putInt("temperature", livingroomTemparature);
-                bundleL.putString("light", livingroomLights);
-                //bundleL.putInt("carbon", livingroomCo2);
-
-                intent.putExtras(bundleL);
-                startActivity(intent);
-                break;
-            case R.id.infoImageView:
-                intent = new Intent(this, info.class);
-                startActivity(intent);
-                break;
-            case R.id.exitButton:
-                makeAndShowDialogBox("Are you sure want to exit?");
         }
-    }
 
-    private void displayToast(String msg) {
-
-        if (mToast != null) {
-            mToast.cancel();
-        }
-        mToast = Toast.makeText(getBaseContext(), msg, Toast.LENGTH_SHORT);
-        mToast.show();
 
     }
 
     public void makeAndShowDialogBox(String message) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
 
         alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
@@ -211,15 +171,25 @@ public class MainActivity extends AppCompatActivity {
                 finishAffinity();
             }
         });
-
-
-        alertDialogBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
+
     }
 }

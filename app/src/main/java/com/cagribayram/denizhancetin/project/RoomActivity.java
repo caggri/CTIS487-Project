@@ -1,32 +1,43 @@
 package com.cagribayram.denizhancetin.project;
 
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Switch;
 import android.widget.TextView;
 
-public class GarageActivity extends AppCompatActivity {
+public class RoomActivity extends AppCompatActivity {
+
     private int temperature;
     private String light;
     private int carbon;
 
+    private Switch mSwitch;
     private String result;
-    private TextView tv;
+    private TextView tv, title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_garage);
+        setContentView(R.layout.activity_room);
 
         Bundle extras = getIntent().getExtras();
-        tv = (TextView) findViewById(R.id.tv_garage);
-
+        tv = (TextView) findViewById(R.id.tv_kitchen);
+        title = (TextView) findViewById(R.id.welcomeTV);
+        mSwitch = (Switch) findViewById(R.id.sw);
         if(extras != null){
+            title.setText(extras.getString("roomName"));
             temperature = extras.getInt("temperature");
             light = extras.getString("light");
-            carbon = extras.getInt("carbon");
 
-            result = temperature + ", " + light + ", " + carbon;
+
+
+            mSwitch.setChecked(light.equals("on") ? true : false);
+
+
+            result = temperature + ", " + light;
             tv.setText(result);
         }
     }

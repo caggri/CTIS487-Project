@@ -3,6 +3,7 @@
     package="com.cagribayram.denizhancetin.project">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -11,10 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".info" android:theme="@style/AppTheme.NoActionBar" ></activity>
-        <activity android:name=".LivingroomActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".GarageActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".KitchenActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".RoomActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
