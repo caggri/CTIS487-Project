@@ -32,12 +32,16 @@ public class RoomActivity extends AppCompatActivity {
             temperature = extras.getInt("temperature");
             light = extras.getString("light");
 
-
-
             mSwitch.setChecked(light.equals("on") ? true : false);
 
+            if(mSwitch.isChecked()){
+                mSwitch.setText("ON");
+            }
+            else if(!mSwitch.isChecked()){
+                mSwitch.setText("OFF");
+            }
 
-            result = temperature + ", " + light;
+            result = "Temperature (C):  " + temperature + "\nLights: " + light;
             tv.setText(result);
         }
     }

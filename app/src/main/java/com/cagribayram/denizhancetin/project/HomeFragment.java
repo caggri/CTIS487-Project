@@ -62,6 +62,8 @@ public class HomeFragment extends Fragment {
     String[] rooms = {"living_room", "kitchen", "garage"};
     String part;
     private InfoFragment mInfoFragment;
+    private ViewAllFragment mViewAllFragment;
+
     public class DownloadTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -241,8 +243,6 @@ public class HomeFragment extends Fragment {
 
 
 
-
-
         try {
             result = task.execute("http://18.206.216.144:8080/get").get();
         } catch (Exception e) {
@@ -277,6 +277,13 @@ public class HomeFragment extends Fragment {
             //MainActivity.mFragmentManager.beginTransaction().replace(R.id.fragment_container, infoFragment, null).addToBackStack(null).commit();
             MainActivity.mFragmentManager.beginTransaction().replace(R.id.fragment_container, mInfoFragment, null).addToBackStack(null).commit();
 
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            //View All
+            MainActivity.mFragmentManager.beginTransaction().replace(R.id.fragment_container, mViewAllFragment, null).addToBackStack(null).commit();
+            return super.onDoubleTap(e);
         }
     }
 

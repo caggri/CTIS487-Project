@@ -8,6 +8,8 @@
     <string name="appinfo">Application Info</string>
     <string name="back_txt">Back</string>
     <string name="exit_txt">Refresh Data</string>
+    <string name="viewall_txt">View All</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
